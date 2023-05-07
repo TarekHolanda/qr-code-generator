@@ -121,12 +121,12 @@ function App() {
                                 id={"qrCode" + index}
                                 size={512}
                                 level={"H"}
-                                imageSettings={{
-                                    src: "./src/assets/hc-icon-black.png",
-                                    height: 103,
-                                    width: 128,
-                                    excavate: true,
-                                }}
+                                // imageSettings={{
+                                //     src: "./src/assets/hc-icon-black.png",
+                                //     height: 103,
+                                //     width: 128,
+                                //     excavate: true,
+                                // }}
                             />
                         </div>
                     )
