@@ -19,7 +19,25 @@ function App() {
 
         for (let i = 0; i < qrCodes.length; i++) {
             const canvas = qrRef.current.querySelector("#qrCode" + i);
-            const blob = await new Promise(resolve => canvas.toBlob(resolve));
+            
+            // Add margin to the QR Code
+            const canvasWithMargin = document.createElement("canvas");
+            const marginContext = canvasWithMargin.getContext("2d");
+            canvasWithMargin.width = canvas.width + 32;
+            canvasWithMargin.height = canvas.height + 96;
+            marginContext.fillStyle = "#fff";
+            marginContext.fillRect(0, 0, canvasWithMargin.width, canvasWithMargin.height);
+            marginContext.drawImage(canvas, 16, 16);
+
+            // Draw the QR Code description
+            const labelContext = canvasWithMargin.getContext("2d");
+            labelContext.font = "56px Arial";
+            labelContext.textBaseline = "bottom";
+            labelContext.fillStyle = "#000000";
+            labelContext.lineWidth = 20;
+            labelContext.fillText(qrCodes[i], 12, 600);
+
+            const blob = await new Promise(resolve => canvasWithMargin.toBlob(resolve));
             const fileName = `${qrCodes[i]}.png`;
             zip.file(fileName, blob);
         }
