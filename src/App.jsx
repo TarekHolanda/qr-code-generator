@@ -112,12 +112,21 @@ function App() {
 
         for (let i = 0; i < qrCodes.length; i++) {
             const canvas = qrRef.current.querySelector("#qrCode" + i);
+            const descriptionSize = qrCodes[i]["description"].length;
             
             // Add margin to the QR Code
             const canvasWithMargin = document.createElement("canvas");
             const marginContext = canvasWithMargin.getContext("2d");
             canvasWithMargin.width = canvas.width + 32;
-            canvasWithMargin.height = canvas.height + 96;
+
+            if (descriptionSize >= 45) {
+                canvasWithMargin.height = canvas.height + 184;
+            } else if (descriptionSize >= 23) {
+                canvasWithMargin.height = canvas.height + 136;
+            } else {
+                canvasWithMargin.height = canvas.height + 88;
+            }
+
             marginContext.fillStyle = "#fff";
             marginContext.fillRect(0, 0, canvasWithMargin.width, canvasWithMargin.height);
             marginContext.drawImage(canvas, 16, 16);
@@ -128,7 +137,14 @@ function App() {
             labelContext.textBaseline = "bottom";
             labelContext.fillStyle = "#000000";
             labelContext.lineWidth = 20;
-            labelContext.fillText(qrCodes[i]["description"], 12, 600);
+
+            labelContext.fillText(qrCodes[i]["description"].substring(0, 23), 12, 592);
+            if (descriptionSize >= 23) {
+                labelContext.fillText(qrCodes[i]["description"].substring(23, 44), 12, 640);
+            }
+            if (descriptionSize >= 45) {
+                labelContext.fillText(qrCodes[i]["description"].substring(44, descriptionSize), 12, 688);
+            }
 
             const blob = await new Promise(resolve => canvasWithMargin.toBlob(resolve));
             const fileName = `${qrCodes[i]["description"]}.png`;
@@ -151,7 +167,7 @@ function App() {
                     "data": "" + i,
                 })
             }
-            console.log(aux)
+
             setQrCodes(aux);
             setValidCodes(true);
         }
